@@ -1,0 +1,14 @@
+# Cookies & secrets
+cookies.txt
+*.cookie
+*.env
+
+# Hasil download
+downloads/
+*.mp4
+*.mkv
+*.webm
+
+# File log / temporary
+*.log
+*.tmp
