@@ -2,6 +2,12 @@
 title YouTube Downloader Agilkanan vAuto
 color 0a
 
+:: Folder default download
+set "DOWNLOAD_DIR=C:\DownloadYT"
+
+:: Cek folder download, kalau belum ada bikin
+if not exist "%DOWNLOAD_DIR%" mkdir "%DOWNLOAD_DIR%"
+
 :menu
 cls
 echo ===========================================
@@ -30,18 +36,27 @@ echo.
 set /p url=Masukkan link YouTube: 
 echo.
 
-:: Cek cookies
+:: Paksa output MP4 (tanpa embed metadata/thumbnail biar cepat)
 if exist "C:\yt-dlp\cookies.txt" (
     echo [INFO] Menggunakan cookies.txt ...
-    yt-dlp.exe --cookies "C:\yt-dlp\cookies.txt" -f "bv*+ba/b" -o "C:\DownloadYT\%%(title)s.mp4" "%url%"
+    yt-dlp.exe --cookies "C:\yt-dlp\cookies.txt" ^
+        -S ext:mp4:m4a ^
+        --merge-output-format mp4 ^
+        --no-embed-metadata --no-embed-thumbnail ^
+        --concurrent-fragments 8 ^
+        -o "%DOWNLOAD_DIR%\%%(title).100s.mp4" "%url%"
 ) else (
     echo [INFO] Tidak ada cookies.txt, lanjut tanpa cookies ...
-    yt-dlp.exe -f "bv*+ba/b" -o "C:\DownloadYT\%%(title)s.mp4" "%url%"
+    yt-dlp.exe -S ext:mp4:m4a ^
+        --merge-output-format mp4 ^
+        --no-embed-metadata --no-embed-thumbnail ^
+        --concurrent-fragments 8 ^
+        -o "%DOWNLOAD_DIR%\%%(title).100s.mp4" "%url%"
 )
 
 echo.
 echo ===========================================
-echo Download Video selesai! Cek di: C:\DownloadYT
+echo Download Video selesai! Cek di: %DOWNLOAD_DIR%
 echo ===========================================
 pause
 goto menu
@@ -55,18 +70,23 @@ echo.
 set /p url=Masukkan link YouTube: 
 echo.
 
-:: Cek cookies
+:: Audio tetap mp3
 if exist "C:\yt-dlp\cookies.txt" (
     echo [INFO] Menggunakan cookies.txt ...
-    yt-dlp.exe --cookies "C:\yt-dlp\cookies.txt" -x --audio-format mp3 -o "C:\DownloadYT\%%(title)s.mp3" "%url%"
+    yt-dlp.exe --cookies "C:\yt-dlp\cookies.txt" ^
+        -x --audio-format mp3 ^
+        --concurrent-fragments 8 ^
+        -o "%DOWNLOAD_DIR%\%%(title).100s.mp3" "%url%"
 ) else (
     echo [INFO] Tidak ada cookies.txt, lanjut tanpa cookies ...
-    yt-dlp.exe -x --audio-format mp3 -o "C:\DownloadYT\%%(title)s.mp3" "%url%"
+    yt-dlp.exe -x --audio-format mp3 ^
+        --concurrent-fragments 8 ^
+        -o "%DOWNLOAD_DIR%\%%(title).100s.mp3" "%url%"
 )
 
 echo.
 echo ===========================================
-echo Download Audio selesai! Cek di: C:\DownloadYT
+echo Download Audio selesai! Cek di: %DOWNLOAD_DIR%
 echo ===========================================
 pause
 goto menu
@@ -80,7 +100,6 @@ echo.
 set /p url=Masukkan link YouTube: 
 echo.
 
-:: Panggil Python script getlink.py
 python getlink.py "%url%"
 
 echo.
