@@ -1,9 +1,11 @@
 @echo off
-title YouTube Downloader Agilkanan vAuto
+title YouTube Downloader Agilkanan vAuto (Portable)
 color 0a
 
-:: Folder default download
-set "DOWNLOAD_DIR=C:\DownloadYT"
+:: Set path portable (folder tempat .bat berada)
+set "YTDLP=%~dp0yt-dlp.exe"
+set "COOKIES=%~dp0cookies.txt"
+set "DOWNLOAD_DIR=%~dp0DownloadYT"
 
 :: Cek folder download, kalau belum ada bikin
 if not exist "%DOWNLOAD_DIR%" mkdir "%DOWNLOAD_DIR%"
@@ -16,7 +18,7 @@ echo ===========================================
 echo.
 echo [1] Download video kualitas terbaik (MP4)
 echo [2] Download audio saja (MP3)
-echo [3] Cek daftar format / playback link (via getlink.py)
+echo [3] Cek daftar format / playback link
 echo [4] Keluar
 echo.
 set /p pilihan=Pilih menu (1-4): 
@@ -36,22 +38,21 @@ echo.
 set /p url=Masukkan link YouTube: 
 echo.
 
-:: Paksa output MP4 (tanpa embed metadata/thumbnail biar cepat)
-if exist "C:\yt-dlp\cookies.txt" (
+if exist "%COOKIES%" (
     echo [INFO] Menggunakan cookies.txt ...
-    yt-dlp.exe --cookies "C:\yt-dlp\cookies.txt" ^
+    "%YTDLP%" --cookies "%COOKIES%" ^
         -S ext:mp4:m4a ^
         --merge-output-format mp4 ^
         --no-embed-metadata --no-embed-thumbnail ^
         --concurrent-fragments 8 ^
-        -o "%DOWNLOAD_DIR%\%%(title).100s.mp4" "%url%"
+        -o "%DOWNLOAD_DIR%\%%(title).100s.%%(ext)s" "%url%"
 ) else (
     echo [INFO] Tidak ada cookies.txt, lanjut tanpa cookies ...
-    yt-dlp.exe -S ext:mp4:m4a ^
+    "%YTDLP%" -S ext:mp4:m4a ^
         --merge-output-format mp4 ^
         --no-embed-metadata --no-embed-thumbnail ^
         --concurrent-fragments 8 ^
-        -o "%DOWNLOAD_DIR%\%%(title).100s.mp4" "%url%"
+        -o "%DOWNLOAD_DIR%\%%(title).100s.%%(ext)s" "%url%"
 )
 
 echo.
@@ -70,17 +71,13 @@ echo.
 set /p url=Masukkan link YouTube: 
 echo.
 
-:: Audio tetap mp3
-if exist "C:\yt-dlp\cookies.txt" (
+if exist "%COOKIES%" (
     echo [INFO] Menggunakan cookies.txt ...
-    yt-dlp.exe --cookies "C:\yt-dlp\cookies.txt" ^
-        -x --audio-format mp3 ^
-        --concurrent-fragments 8 ^
-        -o "%DOWNLOAD_DIR%\%%(title).100s.mp3" "%url%"
+    "%YTDLP%" --cookies "%COOKIES%" ^
+        -x --audio-format mp3 -o "%DOWNLOAD_DIR%\%%(title).100s.mp3" "%url%"
 ) else (
     echo [INFO] Tidak ada cookies.txt, lanjut tanpa cookies ...
-    yt-dlp.exe -x --audio-format mp3 ^
-        --concurrent-fragments 8 ^
+    "%YTDLP%" -x --audio-format mp3 ^
         -o "%DOWNLOAD_DIR%\%%(title).100s.mp3" "%url%"
 )
 
@@ -100,7 +97,7 @@ echo.
 set /p url=Masukkan link YouTube: 
 echo.
 
-python getlink.py "%url%"
+python "%~dp0getlink.py" "%url%"
 
 echo.
 echo ===========================================
@@ -108,3 +105,4 @@ echo Daftar format ditampilkan di atas.
 echo ===========================================
 pause
 goto menu
+
