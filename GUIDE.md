@@ -27,13 +27,23 @@ Di Linux/macOS, jalankan python getlink.py.
 
 🔄 Alur Kerja Sistem
 
-Berikut adalah diagram alur kerja dari sistem ini:
-graph TD;
-    A[Input URL] --> B[Ekstrak ID Video];
-    B --> C[Generate Link dengan yt-dlp];
-    C --> D[Download Video];
-    D --> E[Proses dengan ffmpeg];
-    E --> F[Simpan Hasil];
+Input URL
+    │
+    ▼
+Ekstrak ID Video
+    │
+    ▼
+Generate Link dengan yt-dlp
+    │
+    ▼
+Download Video
+    │
+    ▼
+Proses dengan ffmpeg
+    │
+    ▼
+Simpan Hasil
+
 
 Penjelasan Alur:
 Input URL: Pengguna memasukkan URL video YouTube.
