@@ -77,6 +77,9 @@ Gunakan yt-dlp.exe terbaru agar hasil download lebih cepat dan kompatibel.
 Jika file yt-dlp.exe lebih dari 50 MB, lebih baik download langsung lewat GitHub Release (lebih stabil & cepat).
 Simpan cookies.txt bila ingin mendownload video restricted (misalnya usia, login-only).
 
+📌 For detailed documentation and workflow, see (GUIDE.md)
+
+
 ⚖️ Disclaimer
 Tool ini dibuat untuk kemudahan penggunaan pribadi.
 Penggunaan untuk mendownload konten berhak cipta tanpa izin adalah tanggung jawab pengguna.
